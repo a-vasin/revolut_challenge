@@ -8,8 +8,8 @@ public class MoneyTransferManager {
 
     private final ConcurrentHashMap<Integer, AtomicInteger> db;
 
-    public MoneyTransferManager(ConcurrentHashMap<Integer, AtomicInteger> db) {
-        this.db = db;
+    public MoneyTransferManager() {
+        this.db = new ConcurrentHashMap<>();
     }
 
     public boolean createAccount(int id) {
