@@ -36,23 +36,23 @@ public class MoneyTransferManager {
         return db.get(id).getAndAdd(amount);
     }
 
-    public int withdraw(int id, int amount) throws MissingAccountException, NotEnoughtMoneyException {
+    public int withdraw(int id, int amount) throws MissingAccountException, NotEnoughMoneyException {
         AtomicInteger balance = getBalanceInner(id);
 
         if (balance.get() < amount) {
-            throw new NotEnoughtMoneyException();
+            throw new NotEnoughMoneyException();
         }
 
         synchronized (balance) {
             if (balance.get() < amount) {
-                throw new NotEnoughtMoneyException();
+                throw new NotEnoughMoneyException();
             }
 
             return balance.getAndAdd(-amount);
         }
     }
 
-    public int transfer(int fromId, int toId, int amount) throws NotEnoughtMoneyException, MissingAccountException {
+    public int transfer(int fromId, int toId, int amount) throws NotEnoughMoneyException, MissingAccountException {
         if (!db.containsKey(toId)) {
             throw new MissingAccountException();
         }
