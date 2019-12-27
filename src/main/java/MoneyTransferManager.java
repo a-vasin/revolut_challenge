@@ -33,7 +33,7 @@ public class MoneyTransferManager {
             throw new MissingAccountException();
         }
 
-        return db.get(id).getAndAdd(amount);
+        return db.get(id).addAndGet(amount);
     }
 
     public int withdraw(int id, int amount) throws MissingAccountException, NotEnoughMoneyException {
@@ -48,7 +48,7 @@ public class MoneyTransferManager {
                 throw new NotEnoughMoneyException();
             }
 
-            return balance.getAndAdd(-amount);
+            return balance.addAndGet(-amount);
         }
     }
 
