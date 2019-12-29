@@ -52,16 +52,6 @@ public class MoneyTransferManagerTest {
         Assertions.assertEquals(0, balance);
     }
 
-    private static Runnable wrapException(ThrowingRunnable throwingRunnable) {
-        return () -> {
-            try {
-                throwingRunnable.run();
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        };
-    }
-
     // assume TRANSFER_AMOUNT is even
     @Test
     public void testTransfer() throws MissingAccountException, NotEnoughMoneyException {
@@ -195,5 +185,15 @@ public class MoneyTransferManagerTest {
     @FunctionalInterface
     private interface ThrowingRunnable {
         void run() throws Exception;
+    }
+
+    private static Runnable wrapException(ThrowingRunnable throwingRunnable) {
+        return () -> {
+            try {
+                throwingRunnable.run();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        };
     }
 }
