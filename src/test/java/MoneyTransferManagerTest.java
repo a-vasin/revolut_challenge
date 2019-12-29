@@ -1,3 +1,5 @@
+import exception.MissingAccountException;
+import exception.NotEnoughMoneyException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -152,23 +154,23 @@ public class MoneyTransferManagerTest {
         transferManager.deposit(ID, OPERATIONS_COUNT);
         transferManager.deposit(ANOTHER_ID, OPERATIONS_COUNT);
 
-        Thread depositThread = new Thread(wrapException(() -> {
+        Thread depositThread = new Thread(() -> {
             for (int i = 0; i < OPERATIONS_COUNT; ++i) {
                 transferManager.deposit(ID, 1);
             }
-        }));
+        });
 
-        Thread withdrawThread = new Thread(wrapException(() -> {
+        Thread withdrawThread = new Thread(() -> {
             for (int i = 0; i < OPERATIONS_COUNT; ++i) {
                 transferManager.withdraw(ID, 1);
             }
-        }));
+        });
 
-        Thread transferThread = new Thread(wrapException(() -> {
+        Thread transferThread = new Thread(() -> {
             for (int i = 0; i < OPERATIONS_COUNT; ++i) {
                 transferManager.transfer(ANOTHER_ID, ID, 1);
             }
-        }));
+        });
 
         depositThread.start();
         withdrawThread.start();
@@ -180,20 +182,5 @@ public class MoneyTransferManagerTest {
 
         int balance = transferManager.getBalance(ID);
         Assertions.assertEquals(2 * OPERATIONS_COUNT, balance);
-    }
-
-    @FunctionalInterface
-    private interface ThrowingRunnable {
-        void run() throws Exception;
-    }
-
-    private static Runnable wrapException(ThrowingRunnable throwingRunnable) {
-        return () -> {
-            try {
-                throwingRunnable.run();
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        };
     }
 }
