@@ -1,6 +1,7 @@
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import exception.IllegalAmountException;
 import exception.MissingAccountException;
 import exception.NotEnoughMoneyException;
 
@@ -31,7 +32,9 @@ public class MoneyTransferManager {
         return true;
     }
 
-    public int deposit(int id, int amount) throws MissingAccountException {
+    public int deposit(int id, int amount) {
+        checkAmount(amount);
+
         if (!db.containsKey(id)) {
             throw new MissingAccountException();
         }
@@ -39,7 +42,9 @@ public class MoneyTransferManager {
         return db.get(id).addAndGet(amount);
     }
 
-    public int withdraw(int id, int amount) throws MissingAccountException, NotEnoughMoneyException {
+    public int withdraw(int id, int amount) {
+        checkAmount(amount);
+
         AtomicInteger balance = getBalanceInner(id);
 
         if (balance.get() < amount) {
@@ -55,7 +60,9 @@ public class MoneyTransferManager {
         }
     }
 
-    public int transfer(int fromId, int toId, int amount) throws NotEnoughMoneyException, MissingAccountException {
+    public int transfer(int fromId, int toId, int amount) {
+        checkAmount(amount);
+
         if (!db.containsKey(toId)) {
             throw new MissingAccountException();
         }
@@ -65,15 +72,21 @@ public class MoneyTransferManager {
         return newBalance;
     }
 
-    public int getBalance(int id) throws MissingAccountException {
+    public int getBalance(int id) {
         return getBalanceInner(id).get();
     }
 
-    private AtomicInteger getBalanceInner(int id) throws MissingAccountException {
+    private AtomicInteger getBalanceInner(int id) {
         if (!db.containsKey(id)) {
             throw new MissingAccountException();
         }
 
         return db.get(id);
+    }
+
+    private void checkAmount(int amount) {
+        if (amount <= 0) {
+            throw new IllegalAmountException();
+        }
     }
 }

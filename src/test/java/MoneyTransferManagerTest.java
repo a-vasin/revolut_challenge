@@ -1,3 +1,4 @@
+import exception.IllegalAmountException;
 import exception.MissingAccountException;
 import exception.NotEnoughMoneyException;
 import org.junit.jupiter.api.Assertions;
@@ -23,14 +24,14 @@ public class MoneyTransferManagerTest {
     }
 
     @Test
-    public void testAccountCreation() throws MissingAccountException {
+    public void testAccountCreation() {
         transferManager.createAccount(ID);
         int balance = transferManager.getBalance(ID);
         Assertions.assertEquals(0, balance);
     }
 
     @Test
-    public void testDeposit() throws MissingAccountException {
+    public void testDeposit() {
         transferManager.createAccount(ID);
 
         int balance = transferManager.deposit(ID, DEPOSIT_AMOUNT);
@@ -42,7 +43,7 @@ public class MoneyTransferManagerTest {
 
     // assume that DEPOSIT_AMOUNT is even
     @Test
-    public void testWithdraw() throws NotEnoughMoneyException, MissingAccountException {
+    public void testWithdraw() {
         transferManager.createAccount(ID);
         transferManager.deposit(ID, DEPOSIT_AMOUNT);
 
@@ -56,7 +57,7 @@ public class MoneyTransferManagerTest {
 
     // assume TRANSFER_AMOUNT is even
     @Test
-    public void testTransfer() throws MissingAccountException, NotEnoughMoneyException {
+    public void testTransfer() {
         transferManager.createAccount(ID);
         transferManager.deposit(ID, DEPOSIT_AMOUNT);
 
@@ -79,7 +80,7 @@ public class MoneyTransferManagerTest {
     }
 
     @Test
-    public void testDoubleCreation() throws MissingAccountException {
+    public void testDoubleCreation() {
         boolean created = transferManager.createAccount(ID);
         Assertions.assertTrue(created);
 
@@ -147,7 +148,38 @@ public class MoneyTransferManagerTest {
     }
 
     @Test
-    public void testAsyncActions() throws MissingAccountException, InterruptedException {
+    public void testDepositIllegalAmount() {
+        transferManager.createAccount(ID);
+
+        Assertions.assertThrows(
+                IllegalAmountException.class,
+                () -> transferManager.deposit(ID, 0)
+        );
+    }
+
+    @Test
+    public void testWithdrawIllegalAmount() {
+        transferManager.createAccount(ID);
+
+        Assertions.assertThrows(
+                IllegalAmountException.class,
+                () -> transferManager.withdraw(ID, 0)
+        );
+    }
+
+    @Test
+    public void testTransferIllegalAmount() {
+        transferManager.createAccount(ID);
+        transferManager.createAccount(ANOTHER_ID);
+
+        Assertions.assertThrows(
+                IllegalAmountException.class,
+                () -> transferManager.transfer(ID, ANOTHER_ID, 0)
+        );
+    }
+
+    @Test
+    public void testAsyncActions() throws InterruptedException {
         transferManager.createAccount(ID);
         transferManager.createAccount(ANOTHER_ID);
 
