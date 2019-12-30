@@ -24,6 +24,11 @@ public class Response {
             "Amount should be greater than zero"
     );
 
+    public static final Response SAME_ACCOUNT = new Response(
+            ResponseStatus.ERROR,
+            "Accounts should be different"
+    );
+
     public static final Response ACCOUNT_CREATED = new Response(
             ResponseStatus.SUCCESS,
             "Account was successfully created"

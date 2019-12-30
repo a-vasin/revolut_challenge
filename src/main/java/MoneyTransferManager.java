@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import exception.IllegalAmountException;
 import exception.MissingAccountException;
 import exception.NotEnoughMoneyException;
+import exception.SameAccountException;
 
 /**
  * @author a-vasin
@@ -62,6 +63,10 @@ public class MoneyTransferManager {
 
     public int transfer(int fromId, int toId, int amount) {
         checkAmount(amount);
+
+        if (fromId == toId) {
+            throw new SameAccountException();
+        }
 
         if (!db.containsKey(toId)) {
             throw new MissingAccountException();

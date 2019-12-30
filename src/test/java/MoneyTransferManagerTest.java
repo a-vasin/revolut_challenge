@@ -1,6 +1,7 @@
 import exception.IllegalAmountException;
 import exception.MissingAccountException;
 import exception.NotEnoughMoneyException;
+import exception.SameAccountException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -175,6 +176,17 @@ public class MoneyTransferManagerTest {
         Assertions.assertThrows(
                 IllegalAmountException.class,
                 () -> transferManager.transfer(ID, ANOTHER_ID, 0)
+        );
+    }
+
+    @Test
+    public void testTransferSameAccount() {
+        transferManager.createAccount(ID);
+        transferManager.deposit(ID, DEPOSIT_AMOUNT);
+
+        Assertions.assertThrows(
+                SameAccountException.class,
+                () -> transferManager.transfer(ID, ID, DEPOSIT_AMOUNT)
         );
     }
 

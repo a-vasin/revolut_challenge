@@ -134,6 +134,20 @@ public class MoneyTransferServiceTest {
     }
 
     @Test
+    public void testSameAccount() {
+        int id = getID();
+
+        createAccount(id);
+        deposit(id, DEPOSIT_AMOUNT);
+
+        TransferRequest request = new TransferRequest(id, id, DEPOSIT_AMOUNT);
+        dto.Response response = post(TRANSFER_PATH, request);
+
+        dto.Response expectedResponse = dto.Response.SAME_ACCOUNT;
+        Assertions.assertEquals(expectedResponse, response);
+    }
+
+    @Test
     public void testGetBalance() {
         int id = getID();
 

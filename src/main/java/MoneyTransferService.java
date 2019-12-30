@@ -8,6 +8,7 @@ import dto.WithdrawRequest;
 import exception.IllegalAmountException;
 import exception.MissingAccountException;
 import exception.NotEnoughMoneyException;
+import exception.SameAccountException;
 import spark.Spark;
 
 /**
@@ -84,6 +85,8 @@ public class MoneyTransferService {
     private static Response getResponse(Supplier<Response> supplier) {
         try {
             return supplier.get();
+        } catch (SameAccountException e) {
+            return Response.SAME_ACCOUNT;
         } catch (IllegalAmountException e) {
             return Response.ILLEGAL_AMOUNT;
         } catch (MissingAccountException e) {
