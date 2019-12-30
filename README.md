@@ -1,8 +1,6 @@
 REST API for money transfer
 
-Requires java to be run. Run command:
-`java -jar revolut-challenge-1.0.jar`
-JAR-file in repository root.
+Requires java to be run. Run command: `java -jar revolut-challenge-1.0.jar`. JAR-file in repository root.
 
 Expected workflow:
 * Account creation
