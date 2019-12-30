@@ -68,7 +68,7 @@ In case of error:
 * POST `/withdraw`
 
 Removes money from account. 
-Parameters and output similar to `/withdraw`, additionaly it should be enough money for withdrawing, otherwise error appropriate message will be returned.
+Parameters and output similar to `/withdraw`, additionaly it should be enough money for withdrawing, otherwise error with appropriate message will be returned.
 
 * POST `/transfer`
 
